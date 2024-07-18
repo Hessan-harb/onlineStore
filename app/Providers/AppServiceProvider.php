@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Providers;
+
+use App\Services\CurrencyConvert;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceResponse;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        $this->app->bind('currency.converter',function(){
+            return new CurrencyConvert(config('services.currency_converter.api_key'));
+        });
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+
+        JsonResource::withoutWrapping();
+
+        Paginator::useBootstrap();
+    }
+    
+}
